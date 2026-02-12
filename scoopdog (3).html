@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScoopDog — Tiny legs. Big scoops.</title>
+  <meta name="description" content="ScoopDog: AI-powered Bay Area story scanner for reporters. Tiny legs. Big scoops." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌭</text></svg>" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,700&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --mustard: #E8A838;
+      --rust: #C75B2A;
+      --cream: #FFF8ED;
+      --bark: #3D2B1F;
+      --bark-light: #5C412F;
+      --sky: #87CEEB;
+      --bay-blue: #2D5F7C;
+      --sunset: #F4724E;
+      --bg: #1A1209;
+      --bg-card: #221A0F;
+      --bg-card-hover: #2A2014;
+      --text: #E8DFD0;
+      --text-muted: #8A7D6B;
+      --border: #332A1E;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ========= KEY SCREEN ========= */
+    .key-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+      background: linear-gradient(180deg, #1A1209 0%, #0F0A04 100%);
+    }
+
+    .key-screen .logo-wrap { margin-bottom: 24px; }
+
+    .key-screen h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(42px, 8vw, 68px);
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .key-screen h1 span { color: var(--mustard); }
+
+    .tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--rust);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .key-screen p {
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 440px;
+      line-height: 1.6;
+      margin: 24px 0 20px;
+    }
+
+    .key-input-wrap {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 12px;
+    }
+
+    .key-input-wrap input {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .key-input-wrap input:focus { border-color: var(--mustard); }
+    .key-input-wrap input::placeholder { color: #4A3F30; }
+
+    .key-input-wrap button {
+      background: var(--mustard);
+      color: var(--bark);
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .key-input-wrap button:hover { background: var(--rust); color: var(--cream); }
+
+    .key-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #4A3F30;
+      max-width: 440px;
+      line-height: 1.5;
+    }
+
+    .key-note a { color: var(--mustard); text-decoration: none; }
+    .key-note a:hover { text-decoration: underline; }
+
+    /* Login feature cards */
+    .login-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 560px;
+      margin: 28px 0;
+    }
+
+    .login-feature {
+      background: rgba(34, 26, 15, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    .login-feature .feat-icon { font-size: 22px; margin-bottom: 6px; }
+
+    .login-feature .feat-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .login-feature .feat-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .login-sources {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      max-width: 560px;
+      margin-bottom: 24px;
+    }
+
+    .login-source-tag {
+      background: rgba(34, 26, 15, 0.5);
+      border: 1px solid #2A2014;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .login-divider {
+      width: 60px;
+      height: 1px;
+      background: var(--border);
+      margin: 20px auto;
+    }
+
+    .login-headline {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      color: var(--cream);
+      max-width: 460px;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .login-subhead {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 440px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .login-features { grid-template-columns: 1fr; max-width: 300px; }
+    }
+
+    /* ========= MASTHEAD ========= */
+    .masthead {
+      padding: 28px 24px 20px;
+      text-align: center;
+      position: relative;
+      border-bottom: 2px solid var(--border);
+      background: linear-gradient(180deg, #221A0F 0%, var(--bg) 100%);
+    }
+
+    .masthead::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--mustard), var(--rust), var(--sunset), var(--mustard));
+      background-size: 300% 100%;
+      animation: shimmer 4s ease infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .masthead .logo-inline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+
+    .masthead .logo-inline svg { flex-shrink: 0; }
+
+    .masthead h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      color: var(--cream);
+    }
+
+    .masthead h1 span { color: var(--mustard); }
+
+    .masthead-tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--rust);
+      letter-spacing: 2px;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .date-line {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover { border-color: var(--mustard); color: var(--mustard); }
+
+    .greeting {
+      font-family: 'DM Sans', sans-serif;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    /* ========= CATEGORY NAV ========= */
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      justify-content: center;
+    }
+
+    .cat-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cat-btn:hover { background: var(--bg-card-hover); color: var(--text); border-color: var(--bark-light); }
+    .cat-btn.active { background: var(--mustard); color: var(--bark); border-color: var(--mustard); }
+    .cat-btn:disabled { opacity: 0.5; cursor: wait; }
+
+    .cat-btn .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #332A1E;
+      display: inline-block;
+    }
+
+    .cat-btn.has-stories .dot { background: #5CBF60; }
+    .cat-btn.active .dot { background: rgba(61,43,31,0.5); }
+
+    .fetch-all-btn {
+      background: transparent;
+      border: 2px solid var(--mustard);
+      color: var(--mustard);
+      padding: 10px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 20px auto;
+      display: block;
+      transition: all 0.3s ease;
+    }
+
+    .fetch-all-btn:hover { background: var(--mustard); color: var(--bark); }
+    .fetch-all-btn:disabled { opacity: 0.5; cursor: wait; }
+
+    .lucky-btn {
+      background: linear-gradient(135deg, var(--rust), var(--sunset));
+      border: none;
+      color: var(--cream);
+      padding: 12px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin: 8px auto 20px;
+      display: block;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 12px rgba(244, 114, 78, 0.2);
+    }
+
+    .lucky-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(244, 114, 78, 0.35);
+    }
+
+    .lucky-btn:disabled { opacity: 0.5; cursor: wait; transform: none; }
+
+    /* ========= OUTLET SECTION ========= */
+    .outlet-section {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+    }
+
+    .outlet-section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .outlet-group { margin-bottom: 16px; }
+
+    .outlet-group-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .outlet-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .outlet-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .outlet-btn:hover { background: var(--bg-card-hover); color: var(--text); border-color: var(--bark-light); transform: translateY(-1px); }
+    .outlet-btn.active { background: #2A1F14; color: var(--cream); border-color: var(--mustard); }
+    .outlet-btn:disabled { opacity: 0.5; cursor: wait; }
+    .outlet-btn .outlet-icon { font-size: 14px; }
+    .outlet-btn .outlet-name { white-space: nowrap; }
+
+    .outlet-btn .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #332A1E;
+      display: inline-block;
+      margin-left: 2px;
+    }
+
+    .outlet-btn.has-stories .dot { background: #5CBF60; }
+    .outlet-btn.active .dot { background: var(--mustard); }
+
+    /* ========= RESULTS ========= */
+    .results-area {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-emoji { font-size: 28px; }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .section-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* ========= STORY CARDS ========= */
+    .story-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--mustard);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      animation: slideUp 0.5s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      border-radius: 4px;
+    }
+
+    @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    .story-card:hover {
+      background: var(--bg-card-hover);
+      border-left-color: var(--rust);
+      transform: translateX(4px);
+    }
+
+    .story-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .heat-meter { display: flex; gap: 4px; }
+
+    .heat-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #2A2014;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .heat-dot.active {
+      background: var(--sunset);
+      box-shadow: 0 0 6px rgba(244, 114, 78, 0.5);
+    }
+
+    .story-meta-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .date-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--bay-blue);
+      letter-spacing: 0.5px;
+    }
+
+    .location-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--mustard);
+      letter-spacing: 1px;
+    }
+
+    .story-headline {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .story-summary {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .story-expanded {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .story-angle {
+      background: #1A1510;
+      border: 1px solid #2A2218;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+    }
+
+    .angle-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--rust);
+      letter-spacing: 2px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .story-angle p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #BFB29A;
+      font-style: italic;
+    }
+
+    .source-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--mustard);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .source-link:hover { color: var(--sunset); }
+
+    .card-hint {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: #332A1E;
+      text-align: right;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    /* ========= LOADING ========= */
+    .loading-container {
+      text-align: center;
+      padding: 48px 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .loading-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      animation: sniff 1s ease infinite;
+    }
+
+    @keyframes sniff {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-4px) rotate(-3deg); }
+      75% { transform: translateY(-4px) rotate(3deg); }
+    }
+
+    .loading-text { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; }
+
+    .loading-bar {
+      width: 200px; height: 3px;
+      background: var(--border);
+      margin: 0 auto;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loading-bar-fill {
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, var(--mustard), var(--rust));
+      border-radius: 3px;
+      animation: loadSlide 1.5s ease infinite;
+    }
+
+    @keyframes loadSlide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(350%); }
+    }
+
+    /* ========= EMPTY STATE ========= */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .empty-state .big-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+
+    .empty-state p {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .empty-state .woof {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--mustard);
+      margin-top: 12px;
+      opacity: 0.6;
+    }
+
+    /* ========= ERROR ========= */
+    .error-msg {
+      background: #1F1410;
+      border: 1px solid #3A2515;
+      color: var(--sunset);
+      padding: 12px 18px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      margin-bottom: 16px;
+      border-radius: 6px;
+    }
+
+    /* ========= SCROLLBAR ========= */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--bark-light); }
+
+    /* ========= RESPONSIVE ========= */
+    @media (max-width: 600px) {
+      .category-nav { padding: 12px; gap: 6px; }
+      .cat-btn { padding: 6px 10px; font-size: 11px; }
+      .results-area { padding: 16px; }
+      .story-card { padding: 16px; }
+      .story-headline { font-size: 17px; }
+      .story-meta-right { flex-direction: column; align-items: flex-end; gap: 4px; }
+      .outlet-section { padding: 16px 12px 0; }
+      .outlet-btn { padding: 6px 10px; font-size: 10px; }
+      .masthead .logo-inline svg { width: 60px; height: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // ========================
+    // SVG LOGO
+    // ========================
+    function scoopDogLogo(w, h) {
+      return `<svg viewBox="0 0 400 220" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FF8C42"/>
+            <stop offset="25%" stop-color="#FFB347"/>
+            <stop offset="55%" stop-color="#F4C88C"/>
+            <stop offset="80%" stop-color="#A8D8EA"/>
+            <stop offset="100%" stop-color="#6BB5D6"/>
+          </linearGradient>
+          <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#2A6B8A"/>
+            <stop offset="50%" stop-color="#3A8CB5"/>
+            <stop offset="100%" stop-color="#2A6B8A"/>
+          </linearGradient>
+          <linearGradient id="gg_tower" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#B33A2A"/>
+            <stop offset="50%" stop-color="#C84535"/>
+            <stop offset="100%" stop-color="#A83020"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Sky -->
+        <rect width="400" height="220" rx="14" fill="url(#sky)"/>
+
+        <!-- Sun -->
+        <circle cx="320" cy="45" r="32" fill="#FFD87A" opacity="0.85"/>
+        <circle cx="320" cy="45" r="24" fill="#FFE8A0" opacity="0.95"/>
+        <!-- Sun rays -->
+        <line x1="320" y1="8" x2="320" y2="16" stroke="#FFD87A" stroke-width="1.5" opacity="0.4"/>
+        <line x1="348" y1="20" x2="343" y2="26" stroke="#FFD87A" stroke-width="1.5" opacity="0.3"/>
+        <line x1="355" y1="45" x2="347" y2="45" stroke="#FFD87A" stroke-width="1.5" opacity="0.3"/>
+        <line x1="292" y1="20" x2="297" y2="26" stroke="#FFD87A" stroke-width="1.5" opacity="0.3"/>
+
+        <!-- Marin Headlands (background hills) -->
+        <path d="M0 130 Q40 95 80 108 Q120 85 160 100 Q190 88 220 105 L220 160 L0 160 Z" fill="#5A7E5A" opacity="0.35"/>
+        <path d="M0 135 Q50 110 100 120 Q140 100 180 115 L180 160 L0 160 Z" fill="#4A6E4A" opacity="0.25"/>
+
+        <!-- Bay water -->
+        <rect x="0" y="140" width="400" height="80" rx="0" fill="url(#water)" opacity="0.8"/>
+        <!-- Water shimmer -->
+        <line x1="20" y1="155" x2="55" y2="155" stroke="#5AADCC" stroke-width="0.7" opacity="0.3"/>
+        <line x1="80" y1="150" x2="110" y2="150" stroke="#5AADCC" stroke-width="0.7" opacity="0.25"/>
+        <line x1="140" y1="158" x2="165" y2="158" stroke="#5AADCC" stroke-width="0.7" opacity="0.3"/>
+        <line x1="30" y1="165" x2="70" y2="165" stroke="#5AADCC" stroke-width="0.5" opacity="0.2"/>
+        <line x1="100" y1="168" x2="145" y2="168" stroke="#5AADCC" stroke-width="0.5" opacity="0.2"/>
+
+        <!-- ======= GOLDEN GATE BRIDGE ======= -->
+        <!-- Road deck -->
+        <rect x="15" y="130" width="210" height="5" rx="1" fill="#A83020" opacity="0.7"/>
+
+        <!-- Left tower (south) -->
+        <rect x="52" y="62" width="5" height="73" fill="url(#gg_tower)"/>
+        <rect x="62" y="62" width="5" height="73" fill="url(#gg_tower)"/>
+        <!-- Tower cross beams -->
+        <rect x="52" y="72" width="15" height="3" rx="1" fill="#C84535"/>
+        <rect x="52" y="90" width="15" height="3" rx="1" fill="#C84535"/>
+        <rect x="52" y="108" width="15" height="3" rx="1" fill="#C84535"/>
+        <!-- Tower top -->
+        <rect x="50" y="58" width="19" height="6" rx="2" fill="#D4503E"/>
+
+        <!-- Right tower (north) -->
+        <rect x="162" y="72" width="5" height="63" fill="url(#gg_tower)"/>
+        <rect x="172" y="72" width="5" height="63" fill="url(#gg_tower)"/>
+        <!-- Tower cross beams -->
+        <rect x="162" y="82" width="15" height="3" rx="1" fill="#C84535"/>
+        <rect x="162" y="98" width="15" height="3" rx="1" fill="#C84535"/>
+        <rect x="162" y="114" width="15" height="3" rx="1" fill="#C84535"/>
+        <!-- Tower top -->
+        <rect x="160" y="68" width="19" height="6" rx="2" fill="#D4503E"/>
+
+        <!-- Main cables (catenary curves) -->
+        <path d="M15 75 Q60 130 60 130" stroke="#C84535" stroke-width="2" fill="none"/>
+        <path d="M60 62 Q110 115 170 72" stroke="#C84535" stroke-width="2.5" fill="none"/>
+        <path d="M170 72 Q200 100 225 80" stroke="#C84535" stroke-width="2" fill="none"/>
+
+        <!-- Vertical suspender cables -->
+        <line x1="35" y1="102" x2="35" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="45" y1="95" x2="45" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="80" y1="98" x2="80" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="95" y1="102" x2="95" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="110" y1="106" x2="110" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="125" y1="108" x2="125" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="140" y1="104" x2="140" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="155" y1="98" x2="155" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="190" y1="92" x2="190" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+        <line x1="205" y1="88" x2="205" y2="130" stroke="#C84535" stroke-width="0.6" opacity="0.5"/>
+
+        <!-- ======= DECK / PATIO ======= -->
+        <rect x="230" y="142" width="170" height="78" fill="#A07850"/>
+        <rect x="230" y="142" width="170" height="5" fill="#B8925E"/>
+        <!-- Deck planks -->
+        <line x1="230" y1="155" x2="400" y2="155" stroke="#967248" stroke-width="0.5"/>
+        <line x1="230" y1="168" x2="400" y2="168" stroke="#967248" stroke-width="0.5"/>
+        <line x1="230" y1="181" x2="400" y2="181" stroke="#967248" stroke-width="0.5"/>
+
+        <!-- Deck railing -->
+        <line x1="230" y1="142" x2="230" y2="124" stroke="#8B7355" stroke-width="2.5"/>
+        <line x1="255" y1="142" x2="255" y2="128" stroke="#8B7355" stroke-width="1.5"/>
+        <line x1="280" y1="142" x2="280" y2="128" stroke="#8B7355" stroke-width="1.5"/>
+        <line x1="228" y1="126" x2="285" y2="126" stroke="#8B7355" stroke-width="2.5"/>
+
+        <!-- ======= DACHSHUND ======= -->
+        <!-- Body - long boy lying down -->
+        <ellipse cx="330" cy="162" rx="38" ry="12" fill="#8B5E3C"/>
+        <!-- Belly highlight -->
+        <ellipse cx="330" cy="166" rx="32" ry="7" fill="#A0724E" opacity="0.4"/>
+
+        <!-- Back legs (tucked) -->
+        <ellipse cx="360" cy="170" rx="7" ry="4" fill="#7A5232"/>
+        <ellipse cx="300" cy="170" rx="7" ry="4" fill="#7A5232"/>
+
+        <!-- Front paws stretched -->
+        <rect x="287" y="168" width="11" height="5" rx="2.5" fill="#7A5232"/>
+        <rect x="281" y="169" width="9" height="4" rx="2" fill="#7A5232"/>
+
+        <!-- Tail (perky!) -->
+        <path d="M368 158 Q380 148 375 138" stroke="#8B5E3C" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Head -->
+        <ellipse cx="290" cy="151" rx="15" ry="13" fill="#8B5E3C"/>
+        <!-- Snout (loooong) -->
+        <ellipse cx="274" cy="153" rx="13" ry="7.5" fill="#9B6E4A"/>
+        <!-- Nose -->
+        <ellipse cx="263" cy="152" rx="3.5" ry="2.5" fill="#2A1810"/>
+        <!-- Nose shine -->
+        <ellipse cx="262" cy="151" rx="1" ry="0.7" fill="#4A3828" opacity="0.5"/>
+        <!-- Eye -->
+        <circle cx="288" cy="147" r="3" fill="#2A1810"/>
+        <circle cx="289" cy="146" r="1" fill="white"/>
+        <!-- Eyebrow -->
+        <path d="M284 143 Q288 140 292 143" stroke="#7A5232" stroke-width="1" fill="none"/>
+
+        <!-- Ear (big floppy) -->
+        <ellipse cx="300" cy="144" rx="9" ry="14" fill="#7A5232" transform="rotate(15, 300, 144)"/>
+
+        <!-- Sunglasses -->
+        <rect x="282" y="144" width="12" height="8" rx="3" fill="#2A1810" opacity="0.85"/>
+        <line x1="281" y1="148" x2="275" y2="147" stroke="#2A1810" stroke-width="1.3"/>
+        <line x1="294" y1="148" x2="300" y2="146" stroke="#2A1810" stroke-width="1.3"/>
+
+        <!-- Newspaper under paw -->
+        <rect x="268" y="171" width="24" height="15" rx="1" fill="#F5EDD8" transform="rotate(-6, 280, 178)"/>
+        <text x="272" y="178" font-size="3.5" fill="#8B7355" font-family="serif" font-weight="bold" transform="rotate(-6, 280, 178)">SCOOP</text>
+        <line x1="271" y1="180" x2="288" y2="179" stroke="#CCC0A8" stroke-width="0.5"/>
+        <line x1="271" y1="183" x2="288" y2="182" stroke="#CCC0A8" stroke-width="0.5"/>
+
+        <!-- Coffee mug -->
+        <rect x="350" y="160" width="11" height="13" rx="2" fill="#D4A574"/>
+        <path d="M361 163 Q367 163 367 167 Q367 171 361 171" stroke="#D4A574" stroke-width="1.5" fill="none"/>
+        <!-- Steam wisps -->
+        <path d="M353 158 Q355 153 353 148" stroke="white" stroke-width="0.8" fill="none" opacity="0.35"/>
+        <path d="M357 157 Q359 152 357 147" stroke="white" stroke-width="0.8" fill="none" opacity="0.25"/>
+
+        <!-- Tiny seagull -->
+        <path d="M45 42 Q48 38 51 42" stroke="#555" stroke-width="0.8" fill="none"/>
+        <path d="M130 55 Q133 51 136 55" stroke="#555" stroke-width="0.8" fill="none"/>
+
+        <!-- Sailboat on water -->
+        <polygon points="155,148 158,138 161,148" fill="white" opacity="0.5"/>
+        <line x1="158" y1="138" x2="158" y2="150" stroke="#888" stroke-width="0.5" opacity="0.5"/>
+      </svg>`;
+    }
+
+    // ========================
+    // CONFIG
+    // ========================
+    const CATEGORIES = [
+      { id: "weird", label: "Weird & Wonderful", emoji: "🦑", searchQuery: "weird quirky unusual story San Francisco Bay Area today" },
+      { id: "hidden", label: "Hidden Gems", emoji: "💎", searchQuery: "hidden gem underrated Bay Area local community today" },
+      { id: "conflict", label: "Local Conflict", emoji: "⚡", searchQuery: "controversy dispute Bay Area local news today" },
+      { id: "people", label: "People & Culture", emoji: "🎭", searchQuery: "human interest profile Bay Area people today" },
+      { id: "housing", label: "Housing & Development", emoji: "🏗️", searchQuery: "housing development Bay Area San Francisco today" },
+      { id: "environment", label: "Environment & Nature", emoji: "🌿", searchQuery: "environment nature wildlife Bay Area today" },
+      { id: "tech", label: "Tech Gone Wild", emoji: "🤖", searchQuery: "unusual tech startup Silicon Valley San Francisco today" },
+      { id: "food", label: "Food & Nightlife", emoji: "🍜", searchQuery: "new restaurant food Bay Area San Francisco opening today" },
+      { id: "crime", label: "Crime & Safety", emoji: "🚨", searchQuery: "crime safety incident San Francisco Bay Area today" },
+      { id: "breaking", label: "Breaking News", emoji: "🔴", searchQuery: "breaking news Bay Area San Francisco today" },
+      { id: "reddit", label: "Reddit Buzz", emoji: "📡", searchQuery: "Bay Area San Francisco reddit interesting today" },
+      { id: "twitter", label: "X / Twitter", emoji: "𝕏", searchQuery: "San Francisco Bay Area viral trending today" },
+    ];
+
+    const OUTLETS = [
+      // Major local papers
+      { id: "sfchronicle", label: "SF Chronicle", icon: "📰", site: "sfchronicle.com", type: "newspaper" },
+      { id: "sfgate", label: "SFGate", icon: "🌉", site: "sfgate.com", type: "newspaper" },
+      { id: "sfstandard", label: "SF Standard", icon: "📋", site: "sfstandard.com", type: "newspaper" },
+      { id: "sfexaminer", label: "SF Examiner", icon: "🗞️", site: "sfexaminer.com", type: "newspaper" },
+      { id: "mercurynews", label: "Mercury News", icon: "☿️", site: "mercurynews.com", type: "newspaper" },
+      // Hyperlocal & indie
+      { id: "missionlocal", label: "Mission Local", icon: "🏘️", site: "missionlocal.org", type: "hyperlocal" },
+      { id: "oaklandside", label: "Oaklandside", icon: "🌳", site: "oaklandside.org", type: "hyperlocal" },
+      { id: "berkeleyside", label: "Berkeleyside", icon: "🎓", site: "berkeleyside.org", type: "hyperlocal" },
+      { id: "48hills", label: "48hills", icon: "⛰️", site: "48hills.org", type: "hyperlocal" },
+      { id: "sfist", label: "SFist", icon: "🏙️", site: "sfist.com", type: "hyperlocal" },
+      { id: "hoodline", label: "Hoodline", icon: "📌", site: "hoodline.com", type: "hyperlocal" },
+      { id: "sanjosespotlight", label: "SJ Spotlight", icon: "🔦", site: "sanjosespotlight.com", type: "hyperlocal" },
+      { id: "thebolditalic", label: "Bold Italic", icon: "✒️", site: "thebolditalic.com", type: "hyperlocal" },
+      { id: "ebar", label: "Bay Area Reporter", icon: "🏳️‍🌈", site: "ebar.com", type: "hyperlocal" },
+      // Broadcast / TV
+      { id: "abc7", label: "ABC7 / KGO", icon: "📺", site: "abc7news.com", type: "broadcast" },
+      { id: "nbcbayarea", label: "NBC Bay Area", icon: "📺", site: "nbcbayarea.com", type: "broadcast" },
+      { id: "ktvu", label: "KTVU FOX 2", icon: "📺", site: "ktvu.com", type: "broadcast" },
+      { id: "cbsbayarea", label: "CBS Bay Area", icon: "📺", site: "cbsnews.com/sanfrancisco", type: "broadcast" },
+      { id: "kqed", label: "KQED", icon: "📻", site: "kqed.org", type: "broadcast" },
+      // Food & Lifestyle
+      { id: "eatersf", label: "Eater SF", icon: "🍽️", site: "sf.eater.com", type: "lifestyle" },
+      { id: "infatuation", label: "The Infatuation", icon: "🍕", site: "theinfatuation.com/san-francisco", type: "lifestyle" },
+      // Social
+      { id: "reddit_sf", label: "r/sanfrancisco", icon: "📡", site: "reddit.com/r/sanfrancisco", type: "social" },
+      { id: "reddit_bayarea", label: "r/bayarea", icon: "📡", site: "reddit.com/r/bayarea", type: "social" },
+      { id: "reddit_oakland", label: "r/oakland", icon: "📡", site: "reddit.com/r/oakland", type: "social" },
+      { id: "x_sf", label: "X / SF", icon: "𝕏", site: "x.com", type: "social" },
+    ];
+
+    const SYSTEM_PROMPT = `You are ScoopDog, a Bay Area news editor. Find UNIQUE, under-reported stories from the LAST 48 HOURS ONLY. Ignore anything older than 2 days.
+
+Rules:
+- ONLY stories published within the last 48 hours. Skip anything older.
+- Not already covered by every outlet
+- Compelling human element or surprise factor  
+- Specific to the Bay Area (SF, Oakland, San Jose, Peninsula, East Bay, North Bay)
+- Prioritize quirky, weird, only-in-SF stories
+
+Respond ONLY with a JSON array (no markdown, no backticks). Each object:
+- "headline": Punchy editorial headline
+- "summary": 2-3 sentence pitch
+- "angle": One sentence reporting angle
+- "source": Source name (e.g. "SFGate", "r/sanfrancisco")
+- "url": Source URL
+- "date": Published date (e.g. "Feb 12, 2026")
+- "heat": 1-5 rating (5 = drop everything)
+- "location": Bay Area location if known
+
+Return 3-4 stories max. Quality over quantity.`;
+
+    // ========================
+    // STATE
+    // ========================
+    const APP_VERSION = '9';
+    if (localStorage.getItem('beatsheet_version') !== APP_VERSION) {
+      localStorage.removeItem('beatsheet_key');
+      localStorage.setItem('beatsheet_version', APP_VERSION);
+    }
+
+    let state = {
+      apiKey: localStorage.getItem('beatsheet_key') || '',
+      authenticated: !!localStorage.getItem('beatsheet_key'),
+      stories: {},
+      loading: {},
+      activeCategory: null,
+      error: null,
+      lastFetched: {},
+      expandedCards: {},
+    };
+
+    function setState(updates) {
+      Object.assign(state, updates);
+      render();
+    }
+
+    // ========================
+    // API LOGIC
+    // ========================
+    async function apiCall(messages, retries = 2, sysOverride = null) {
+      const resp = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": state.apiKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true",
+        },
+        body: JSON.stringify({
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 600,
+          system: sysOverride || SYSTEM_PROMPT,
+          tools: [{ type: "web_search_20250305", name: "web_search" }],
+          messages,
+        }),
+      });
+      const data = await resp.json();
+      if (data.error && data.error.type === 'rate_limit_error' && retries > 0) {
+        await new Promise(r => setTimeout(r, 10000));
+        return apiCall(messages, retries - 1, sysOverride);
+      }
+      return data;
+    }
+
+    function handleAuthError(errMsg, errorObj) {
+      if (errMsg.includes('invalid') || errMsg.includes('auth') || errMsg.includes('key') || errorObj?.type === 'authentication_error') {
+        localStorage.removeItem('beatsheet_key');
+        localStorage.setItem('beatsheet_key_error', 'true');
+        setState({ apiKey: '', authenticated: false, stories: {}, activeCategory: null, error: null, loading: {} });
+        return true;
+      }
+      return false;
+    }
+
+    function formatError(errMsg, errorObj) {
+      if (errorObj?.type === 'rate_limit_error') {
+        return 'Rate limit hit — wait ~30 seconds and try again, or try one category at a time.';
+      }
+      if (errMsg.includes('credit') || errMsg.includes('balance')) {
+        return 'Credit balance too low. Check console.anthropic.com/settings/billing.';
+      }
+      return `API error: ${errMsg}`;
+    }
+
+    async function fetchStories(category) {
+      setState({
+        activeCategory: category.id,
+        loading: { ...state.loading, [category.id]: true },
+        error: null,
+      });
+
+      try {
+        const userMsg = `Find unique ${category.label.toLowerCase()} stories in the Bay Area. Search: "${category.searchQuery}"`;
+        let messages = [{ role: "user", content: userMsg }];
+        let currentData = await apiCall(messages);
+
+        if (currentData.error) {
+          const errMsg = currentData.error.message || JSON.stringify(currentData.error);
+          if (handleAuthError(errMsg, currentData.error)) return;
+          setState({ error: formatError(errMsg, currentData.error), loading: { ...state.loading, [category.id]: false } });
+          return;
+        }
+
+        let maxLoops = 3;
+        while (currentData.stop_reason === "tool_use" && maxLoops > 0) {
+          maxLoops--;
+          messages.push({ role: "assistant", content: currentData.content });
+          const toolResults = currentData.content
+            .filter(b => b.type === "tool_use")
+            .map(b => ({ type: "tool_result", tool_use_id: b.id, content: "Done. Return JSON." }));
+          messages.push({ role: "user", content: toolResults });
+          currentData = await apiCall(messages);
+          if (currentData.error) {
+            const errMsg2 = currentData.error.message || JSON.stringify(currentData.error);
+            if (handleAuthError(errMsg2, currentData.error)) return;
+            setState({ error: formatError(errMsg2, currentData.error), loading: { ...state.loading, [category.id]: false } });
+            return;
+          }
+        }
+
+        const textContent = currentData.content
+          ?.filter(b => b.type === "text")
+          .map(b => b.text)
+          .join("\n");
+
+        if (textContent) {
+          let cleaned = textContent.replace(/```json\s?/g, "").replace(/```/g, "").trim();
+          const arrayMatch = cleaned.match(/\[[\s\S]*\]/);
+          if (arrayMatch) cleaned = arrayMatch[0];
+          try {
+            const parsed = JSON.parse(cleaned);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              const sorted = [...parsed].sort((a, b) => {
+                const dateA = a.date ? new Date(a.date.replace(/•/g, "")) : new Date(0);
+                const dateB = b.date ? new Date(b.date.replace(/•/g, "")) : new Date(0);
+                return dateB - dateA;
+              });
+              setState({
+                stories: { ...state.stories, [category.id]: sorted },
+                lastFetched: { ...state.lastFetched, [category.id]: new Date() },
+                loading: { ...state.loading, [category.id]: false },
+              });
+              return;
+            }
+          } catch (e) {
+            setState({ error: `Parse error. Raw: ${textContent.substring(0, 200)}...`, loading: { ...state.loading, [category.id]: false } });
+            return;
+          }
+        }
+
+        setState({ error: `Unexpected response. Stop: ${currentData.stop_reason}`, loading: { ...state.loading, [category.id]: false } });
+      } catch (err) {
+        setState({ error: `Network error: ${err.message}`, loading: { ...state.loading, [category.id]: false } });
+      }
+    }
+
+    async function fetchAll() {
+      for (const cat of CATEGORIES) {
+        await fetchStories(cat);
+        await new Promise(r => setTimeout(r, 3000));
+      }
+    }
+
+    async function fetchByOutlet(outlet) {
+      const outletCat = {
+        id: `outlet_${outlet.id}`,
+        label: outlet.label,
+        emoji: outlet.icon,
+        searchQuery: `Bay Area story site:${outlet.site}`,
+      };
+      await fetchStories(outletCat);
+    }
+
+    const LUCKY_PROMPT = `You are ScoopDog, a Bay Area news editor. Find the most INTERESTING, NOVEL, and UNIQUE stories from the Bay Area in the LAST 48 HOURS.
+
+Mix it up — weird stuff, local drama, hidden gems, food news, tech chaos, community stories. Surprise me. The more unexpected and "only in the Bay Area" the better.
+
+Respond ONLY with a JSON array (no markdown, no backticks). Each object:
+- "headline": Punchy editorial headline
+- "summary": 2-3 sentence pitch
+- "angle": One sentence reporting angle
+- "source": Source name
+- "url": Source URL
+- "date": Published date (e.g. "Feb 12, 2026")
+- "heat": 1-5 rating (5 = drop everything)
+- "location": Bay Area location if known
+
+Return 10-15 stories. Cast a wide net.`;
+
+    async function fetchLucky() {
+      const luckyId = 'lucky';
+      setState({
+        activeCategory: luckyId,
+        loading: { ...state.loading, [luckyId]: true },
+        error: null,
+      });
+
+      const queries = [
+        "most interesting unusual Bay Area news today",
+        "San Francisco weird quirky local story today",
+        "Bay Area community drama controversy today",
+        "Oakland Berkeley San Jose news unique today",
+      ];
+
+      // Run all 4 searches in parallel
+      const results = await Promise.allSettled(
+        queries.map(async (q) => {
+          try {
+            let messages = [{ role: "user", content: `Find unique Bay Area stories. Search: "${q}"` }];
+            let currentData = await apiCall(messages, 2, LUCKY_PROMPT);
+
+            if (currentData.error) return [];
+
+            let maxLoops = 3;
+            while (currentData.stop_reason === "tool_use" && maxLoops > 0) {
+              maxLoops--;
+              messages.push({ role: "assistant", content: currentData.content });
+              const toolResults = currentData.content
+                .filter(b => b.type === "tool_use")
+                .map(b => ({ type: "tool_result", tool_use_id: b.id, content: "Done. Return JSON." }));
+              messages.push({ role: "user", content: toolResults });
+              currentData = await apiCall(messages, 1, LUCKY_PROMPT);
+              if (currentData.error) break;
+            }
+
+            const textContent = currentData.content
+              ?.filter(b => b.type === "text")
+              .map(b => b.text)
+              .join("\n");
+
+            if (textContent) {
+              let cleaned = textContent.replace(/```json\s?/g, "").replace(/```/g, "").trim();
+              const arrayMatch = cleaned.match(/\[[\s\S]*\]/);
+              if (arrayMatch) cleaned = arrayMatch[0];
+              try {
+                const parsed = JSON.parse(cleaned);
+                if (Array.isArray(parsed)) return parsed;
+              } catch(e) {}
+            }
+          } catch(e) {}
+          return [];
+        })
+      );
+
+      const allStories = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
+
+      if (allStories.length > 0) {
+        // Dedupe by headline similarity and sort by heat then date
+        const seen = new Set();
+        const deduped = allStories.filter(s => {
+          const key = s.headline?.toLowerCase().replace(/[^a-z]/g, '').substring(0, 30);
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+        const sorted = deduped.sort((a, b) => {
+          if ((b.heat || 0) !== (a.heat || 0)) return (b.heat || 0) - (a.heat || 0);
+          const dateA = a.date ? new Date(a.date.replace(/•/g, "")) : new Date(0);
+          const dateB = b.date ? new Date(b.date.replace(/•/g, "")) : new Date(0);
+          return dateB - dateA;
+        }).slice(0, 15);
+
+        setState({
+          stories: { ...state.stories, [luckyId]: sorted },
+          lastFetched: { ...state.lastFetched, [luckyId]: new Date() },
+          loading: { ...state.loading, [luckyId]: false },
+        });
+      } else {
+        setState({
+          error: 'No scoops found — try again in a minute.',
+          loading: { ...state.loading, [luckyId]: false },
+        });
+      }
+    }
+
+    // ========================
+    // RENDER
+    // ========================
+    function render() {
+      const app = document.getElementById('app');
+      if (!state.authenticated) {
+        app.innerHTML = renderKeyScreen();
+        attachKeyListeners();
+        return;
+      }
+      app.innerHTML = renderMainApp();
+      attachMainListeners();
+    }
+
+    function renderKeyScreen() {
+      const keyError = localStorage.getItem('beatsheet_key_error');
+      if (keyError) localStorage.removeItem('beatsheet_key_error');
+      return `
+        <div class="key-screen">
+          <div class="logo-wrap">${scoopDogLogo(320, 176)}</div>
+          <h1>Scoop<span>Dog</span></h1>
+          <div class="tagline">Tiny legs. Big scoops.</div>
+
+          <div class="login-divider"></div>
+
+          <div class="login-headline">Your AI-powered Bay Area newsroom assistant</div>
+          <div class="login-subhead">ScoopDog sniffs out unique, under-reported stories from local papers, Reddit, and X every morning — so you can chase scoops, not feeds.</div>
+
+          <div class="login-features">
+            <div class="login-feature">
+              <div class="feat-icon">🔍</div>
+              <div class="feat-title">AI Web Search</div>
+              <div class="feat-desc">Live search across 25+ Bay Area sources</div>
+            </div>
+            <div class="login-feature">
+              <div class="feat-icon">🎯</div>
+              <div class="feat-title">Story Angles</div>
+              <div class="feat-desc">Unique reporting angles for every story</div>
+            </div>
+            <div class="login-feature">
+              <div class="feat-icon">🔥</div>
+              <div class="feat-title">Heat Ratings</div>
+              <div class="feat-desc">1–5 score on how urgent each scoop is</div>
+            </div>
+          </div>
+
+          <div class="login-sources">
+            <span class="login-source-tag">📰 SF Chronicle</span>
+            <span class="login-source-tag">🌉 SFGate</span>
+            <span class="login-source-tag">📋 SF Standard</span>
+            <span class="login-source-tag">🗞️ SF Examiner</span>
+            <span class="login-source-tag">☿️ Mercury News</span>
+            <span class="login-source-tag">📺 ABC7 / KGO</span>
+            <span class="login-source-tag">📺 NBC Bay Area</span>
+            <span class="login-source-tag">📺 KTVU FOX 2</span>
+            <span class="login-source-tag">📺 CBS Bay Area</span>
+            <span class="login-source-tag">📻 KQED</span>
+            <span class="login-source-tag">🏘️ Mission Local</span>
+            <span class="login-source-tag">🌳 Oaklandside</span>
+            <span class="login-source-tag">🎓 Berkeleyside</span>
+            <span class="login-source-tag">⛰️ 48hills</span>
+            <span class="login-source-tag">🏙️ SFist</span>
+            <span class="login-source-tag">📌 Hoodline</span>
+            <span class="login-source-tag">🔦 SJ Spotlight</span>
+            <span class="login-source-tag">✒️ Bold Italic</span>
+            <span class="login-source-tag">🏳️‍🌈 Bay Area Reporter</span>
+            <span class="login-source-tag">🍽️ Eater SF</span>
+            <span class="login-source-tag">🍕 The Infatuation</span>
+            <span class="login-source-tag">📡 Reddit</span>
+            <span class="login-source-tag">𝕏 X / Twitter</span>
+          </div>
+
+          ${keyError ? `<div class="error-msg" style="max-width: 460px;">⚠ Ruh roh — that API key didn't work. Try a fresh one!</div>` : ''}
+
+          <p style="margin-top: 4px;">Enter your Anthropic API key to start sniffing. Your key stays in your browser and is only sent to Anthropic's API.</p>
+          <div class="key-input-wrap">
+            <input id="key-input" type="password" placeholder="sk-ant-..." value="" />
+            <button id="key-submit">Fetch! →</button>
+          </div>
+          <div class="key-note">
+            No key yet? Grab one at <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a> — requires web search enabled on your plan.
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMainApp() {
+      const now = new Date();
+      const greeting = now.getHours() < 12 ? "Good morning" : now.getHours() < 17 ? "Good afternoon" : "Good evening";
+      const dateStr = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+      const anyLoading = Object.values(state.loading).some(Boolean);
+
+      let activeCat = CATEGORIES.find(c => c.id === state.activeCategory);
+      if (!activeCat && state.activeCategory === 'lucky') {
+        activeCat = { id: 'lucky', label: "I'm Feeling Lucky", emoji: '🎰' };
+      }
+      if (!activeCat && state.activeCategory) {
+        const outletMatch = OUTLETS.find(o => `outlet_${o.id}` === state.activeCategory);
+        if (outletMatch) activeCat = { id: `outlet_${outletMatch.id}`, label: outletMatch.label, emoji: outletMatch.icon };
+      }
+
+      const currentStories = state.activeCategory ? state.stories[state.activeCategory] : null;
+      const isLoading = state.activeCategory ? state.loading[state.activeCategory] : false;
+      const newspapers = OUTLETS.filter(o => o.type === 'newspaper');
+      const hyperlocal = OUTLETS.filter(o => o.type === 'hyperlocal');
+      const broadcast = OUTLETS.filter(o => o.type === 'broadcast');
+      const lifestyle = OUTLETS.filter(o => o.type === 'lifestyle');
+      const socials = OUTLETS.filter(o => o.type === 'social');
+
+      function outletBtnHtml(o) {
+        return `<button class="outlet-btn ${state.activeCategory === 'outlet_' + o.id ? 'active' : ''} ${state.stories['outlet_' + o.id] ? 'has-stories' : ''}" data-outlet-id="${o.id}" ${state.loading['outlet_' + o.id] ? 'disabled' : ''}>
+          <span class="outlet-icon">${o.icon}</span>
+          <span class="outlet-name">${o.label}</span>
+          <span class="dot"></span>
+        </button>`;
+      }
+
+      return `
+        <header class="masthead">
+          <div class="logo-inline">
+            ${scoopDogLogo(90, 50)}
+            <div>
+              <h1>Scoop<span>Dog</span></h1>
+              <div class="masthead-tagline">Tiny legs. Big scoops.</div>
+            </div>
+          </div>
+          <div class="top-bar">
+            <div class="date-line">${dateStr}</div>
+            <button class="logout-btn" id="logout-btn">Change Key</button>
+          </div>
+          <div class="greeting">${greeting}. Let's sniff out some stories 🐕</div>
+        </header>
+
+        <nav class="category-nav">
+          ${CATEGORIES.map(cat => `
+            <button
+              class="cat-btn ${state.activeCategory === cat.id ? 'active' : ''} ${state.stories[cat.id] ? 'has-stories' : ''}"
+              data-cat-id="${cat.id}"
+              ${state.loading[cat.id] ? 'disabled' : ''}
+            >
+              <span class="dot"></span>
+              ${cat.emoji} ${cat.label}
+            </button>
+          `).join('')}
+        </nav>
+
+        <button class="fetch-all-btn" id="fetch-all-btn" ${anyLoading ? 'disabled' : ''}>
+          ${anyLoading ? '🐕 Sniffing...' : '🐕 Sniff All Categories'}
+        </button>
+
+        <button class="lucky-btn" id="lucky-btn" ${anyLoading ? 'disabled' : ''}>
+          ${state.loading['lucky'] ? '🎰 Rolling the dice...' : '🎰 I\'m Feeling Lucky'}
+        </button>
+
+        <div class="outlet-section">
+          <div class="outlet-section-title">Browse by Outlet</div>
+          <div class="outlet-group">
+            <div class="outlet-group-label">📰 Major Local Papers</div>
+            <div class="outlet-grid">
+              ${newspapers.map(o => outletBtnHtml(o)).join('')}
+            </div>
+          </div>
+          <div class="outlet-group">
+            <div class="outlet-group-label">📺 Broadcast & Public Media</div>
+            <div class="outlet-grid">
+              ${broadcast.map(o => outletBtnHtml(o)).join('')}
+            </div>
+          </div>
+          <div class="outlet-group">
+            <div class="outlet-group-label">📌 Hyperlocal & Indie</div>
+            <div class="outlet-grid">
+              ${hyperlocal.map(o => outletBtnHtml(o)).join('')}
+            </div>
+          </div>
+          <div class="outlet-group">
+            <div class="outlet-group-label">🍽️ Food & Lifestyle</div>
+            <div class="outlet-grid">
+              ${lifestyle.map(o => outletBtnHtml(o)).join('')}
+            </div>
+          </div>
+          <div class="outlet-group">
+            <div class="outlet-group-label">💬 Social & Community</div>
+            <div class="outlet-grid">
+              ${socials.map(o => outletBtnHtml(o)).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="results-area">
+          ${state.error ? `<div class="error-msg">⚠ ${state.error}</div>` : ''}
+
+          ${isLoading && activeCat ? `
+            <div class="loading-container">
+              <div class="loading-icon">${activeCat.id === 'lucky' ? '🎰' : '🐕'}</div>
+              <div class="loading-text">${activeCat.id === 'lucky' ? 'Sniffing everywhere for the juiciest scoops...' : `Sniffing <strong>${activeCat.label}</strong> for scoops...`}</div>
+              <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+              ${activeCat.id === 'lucky' ? '<div style="font-family: Space Mono, monospace; font-size: 10px; color: #5C412F; margin-top: 12px;">Searching 4 beats in parallel — ~15-30 seconds</div>' : ''}
+            </div>
+          ` : ''}
+
+          ${!isLoading && currentStories && currentStories.length > 0 ? `
+            <div class="section-header">
+              <span class="section-emoji">${activeCat.emoji}</span>
+              <span class="section-title">${activeCat.label}</span>
+              <span class="section-count">
+                ${currentStories.length} scoops •
+                ${state.lastFetched[state.activeCategory]?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || ''}
+              </span>
+            </div>
+            ${currentStories.map((story, i) => renderStoryCard(story, i)).join('')}
+          ` : ''}
+
+          ${!isLoading && !currentStories && !state.error ? `
+            <div class="empty-state">
+              <div class="big-icon">🐕</div>
+              <p>Pick a category or outlet above to start sniffing. Each uses AI + live web search to dig up unique stories you won't see on the front page.</p>
+              <div class="woof">* sniff sniff *</div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderStoryCard(story, index) {
+      const cardId = `card-${state.activeCategory}-${index}`;
+      const expanded = state.expandedCards[cardId];
+      const heatDots = Array.from({ length: 5 }, (_, i) =>
+        `<span class="heat-dot ${i < story.heat ? 'active' : ''}"></span>`
+      ).join('');
+
+      return `
+        <div class="story-card" data-card-id="${cardId}" style="animation-delay: ${index * 0.12}s;">
+          <div class="story-header">
+            <div class="heat-meter">${heatDots}</div>
+            <div class="story-meta-right">
+              ${story.date ? `<span class="date-tag">🕐 ${story.date}</span>` : ''}
+              ${story.location ? `<span class="location-tag">📍 ${story.location}</span>` : ''}
+            </div>
+          </div>
+          <h3 class="story-headline">${story.headline}</h3>
+          <p class="story-summary">${story.summary}</p>
+          ${expanded ? `
+            <div class="story-expanded">
+              <div class="story-angle">
+                <span class="angle-label">YOUR ANGLE →</span>
+                <p>${story.angle}</p>
+              </div>
+              <a href="${story.url}" target="_blank" rel="noopener noreferrer" class="source-link" onclick="event.stopPropagation()">
+                Source: ${story.source} ↗
+              </a>
+            </div>
+          ` : ''}
+          <div class="card-hint">${expanded ? 'click to collapse' : 'click for angle + source'}</div>
+        </div>
+      `;
+    }
+
+    // ========================
+    // EVENT LISTENERS
+    // ========================
+    function attachKeyListeners() {
+      document.getElementById('key-submit')?.addEventListener('click', () => {
+        const key = document.getElementById('key-input').value.trim();
+        if (key) {
+          localStorage.setItem('beatsheet_key', key);
+          setState({ apiKey: key, authenticated: true });
+        }
+      });
+      document.getElementById('key-input')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('key-submit').click();
+      });
+    }
+
+    function attachMainListeners() {
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('beatsheet_key');
+        setState({ apiKey: '', authenticated: false, stories: {}, activeCategory: null });
+      });
+
+      document.getElementById('fetch-all-btn')?.addEventListener('click', fetchAll);
+      document.getElementById('lucky-btn')?.addEventListener('click', fetchLucky);
+
+      document.querySelectorAll('.cat-btn[data-cat-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = CATEGORIES.find(c => c.id === btn.dataset.catId);
+          if (cat) fetchStories(cat);
+        });
+      });
+
+      document.querySelectorAll('.story-card[data-card-id]').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.source-link')) return;
+          const cardId = card.dataset.cardId;
+          setState({ expandedCards: { ...state.expandedCards, [cardId]: !state.expandedCards[cardId] } });
+        });
+      });
+
+      document.querySelectorAll('.outlet-btn[data-outlet-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const outlet = OUTLETS.find(o => o.id === btn.dataset.outletId);
+          if (outlet) fetchByOutlet(outlet);
+        });
+      });
+    }
+
+    // ========================
+    // INIT
+    // ========================
+    render();
+  </script>
+</body>
+</html>
